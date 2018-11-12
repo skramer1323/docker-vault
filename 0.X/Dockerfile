@@ -78,8 +78,8 @@ EXPOSE 8200
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY fix-permissions.sh /usr/bin/fix-permissions.sh
 
-RUN /usr/bin/fix-permissions.sh / \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN  chmod +x /usr/bin/fix-permissions.sh \
+    &&  /usr/bin/fix-permissions.sh 
     
 ENTRYPOINT ["docker-entrypoint.sh"]
 
