@@ -7,6 +7,7 @@ USER root
 
 # Create a vault user and group first so the IDs get set the same way,
 # even as the rest of this may change over time.
+
 RUN addgroup vault && \
     adduser -S -G vault vault
 
@@ -75,10 +76,10 @@ EXPOSE 8200
 # For production derivatives of this container, you shoud add the IPC_LOCK
 # capability so that Vault can mlock memory.
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY fix-permissions /usr/bin/fix-permissions
+COPY fix-permissions.sh /usr/bin/fix-permissions.sh
 
-RUN /usr/bin/fix-permissions / \
-    && chmod 775 /usr/local/bin/docker-entrypoint.sh
+RUN /usr/bin/fix-permissions.sh / \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
     
 ENTRYPOINT ["docker-entrypoint.sh"]
 
