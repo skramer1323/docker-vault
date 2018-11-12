@@ -77,9 +77,7 @@ EXPOSE 8200
 # capability so that Vault can mlock memory.
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 #COPY fix-permissions.sh /usr/bin/fix-permissions.sh
-RUN chgrp -R 0 /vault \
- && chmod -R g+rwX /vault
- 
+
 #RUN  chmod +x /usr/bin/fix-permissions.sh \
 #    &&  /usr/bin/fix-permissions.sh /vault
     
