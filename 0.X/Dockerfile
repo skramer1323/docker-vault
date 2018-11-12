@@ -1,11 +1,15 @@
 FROM alpine:3.8
 
 # This is the release of Vault to pull in.
-ENV VAULT_VERSION=1.0.0-beta1
+ENV VAULT_VERSION=0.11.4
+
+USER root
 
 # Create a vault user and group first so the IDs get set the same way,
 # even as the rest of this may change over time.
-RUN addgroup -S vault && adduser -S vault -G vault
+
+RUN addgroup vault && \
+    adduser -S -G vault vault
 
 # Set up certificates, our base tools, and Vault.
 RUN set -eux; \
@@ -15,7 +19,7 @@ RUN set -eux; \
         armhf) ARCH='arm' ;; \
         aarch64) ARCH='arm64' ;; \
         x86_64) ARCH='amd64' ;; \
-        x86) ARCH='386' ;; \ 
+        x86) ARCH='386' ;; \
         *) echo >&2 "error: unsupported architecture: $apkArch"; exit 1 ;; \
     esac && \
     VAULT_GPGKEY=91A6E7F85D05C65630BEF18951852D87348FFC4C; \
@@ -71,13 +75,12 @@ EXPOSE 8200
 #
 # For production derivatives of this container, you shoud add the IPC_LOCK
 # capability so that Vault can mlock memory.
-
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY fix-permissions.sh /usr/bin/fix-permissions.sh
 
-RUN  chmod +x /usr/bin/fix-permissions.sh \
-    &&  /usr/bin/fix-permissions.sh /vault/config/
-    
+RUN chmod +x /usr/bin/fix-permissions.sh \
+    && /usr/bin/fix-permissions.sh /vault
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # By default you'll get a single-node development server that stores everything
