@@ -3,13 +3,9 @@ FROM alpine:3.8
 # This is the release of Vault to pull in.
 ENV VAULT_VERSION=1.0.0-beta1
 
-USER root
-
 # Create a vault user and group first so the IDs get set the same way,
 # even as the rest of this may change over time.
-
-RUN addgroup vault && \
-    adduser -S -G vault vault
+RUN addgroup -S vault && adduser -S vault -G vault
 
 # Set up certificates, our base tools, and Vault.
 RUN set -eux; \
@@ -75,6 +71,7 @@ EXPOSE 8200
 #
 # For production derivatives of this container, you shoud add the IPC_LOCK
 # capability so that Vault can mlock memory.
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY fix-permissions.sh /usr/bin/fix-permissions.sh
 
