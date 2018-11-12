@@ -79,7 +79,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY fix-permissions.sh /usr/bin/fix-permissions.sh
 
 RUN  chmod +x /usr/bin/fix-permissions.sh \
-    &&  /usr/bin/fix-permissions.sh 
+    &&  /usr/bin/fix-permissions.sh /vault
     
 ENTRYPOINT ["docker-entrypoint.sh"]
 
